@@ -31,7 +31,7 @@ RUN git clone https://github.com/gohornet/hornet.git
 RUN cd hornet;./scripts/build_hornet.sh
 COPY config.json /app/hornet/config.json
 RUN mkdir /var/log/hornet
-RUN cd hornet;COO_SEED="SEKJIWLFUBCDYNLFLPXPPKGITZJMDMNATLUOWJOAM9GFETZGWQVDDHNTHMLXG9BZIJJPHNZJAREVIYCVW" ./hornet hornet --cooBootstrap
+RUN cd hornet;COO_SEED="SEKJIWLFUBCDYNLFLPXPPKGITZJMDMNATLUOWJOAM9GFETZGWQVDDHNTHMLXG9BZIJJPHNZJAREVIYCVW" ./hornet -d ./ tool merkle > /var/log/hornet/markletree.log
 COPY snapshot.csv /app/hornet/snapshot.csv
 RUN cat /var/log/hornet/markletree.log
 # setup supervisrod
