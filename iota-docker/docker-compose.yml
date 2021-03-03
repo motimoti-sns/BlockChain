@@ -1,0 +1,7 @@
+version: '3'
+services:
+    hornet:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        network_mode: host
