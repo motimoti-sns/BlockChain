@@ -32,59 +32,65 @@ getAddress(seed, 1).then(function(ret_address){
 });
 const keypair = createKeyPair();
 
-var temporary_transction_data = {}; // カメラごとに保持するデータ
-
 /* 2. listen()メソッドを実行して4001番ポートで待ち受け。*/
 const serverPortNumber = 4001
-var server = app.listen(serverPortNumber, () => {
+const server = app.listen(serverPortNumber, () => {
     console.log("Node.js is listening to PORT:" + serverPortNumber);
 });
 
 
 // IOTA関連関数
-// function preparTransferMessage(address: string, data): Array<{
-//   value: number,
-//   address: string,
-//   message: string
-// }> {
-//   // Define a message to send.
-//   // This message must include only ASCII characters.
-//   const message = JSON.stringify(data);
+function preparTransferMessage(address: string, data): Array<{
+  value: number,
+  address: string,
+  message: string
+}> {
+  // Define a message to send.
+  // This message must include only ASCII characters.
+  const message = JSON.stringify(data);
 
-//   // Convert the message to trytes
-//   const messageInTrytes = Converter.asciiToTrytes(message);
+  // Convert the message to trytes
+  const messageInTrytes = Converter.asciiToTrytes(message);
 
-//   // Define a zero-value transaction object
-//   // that sends the message to the address
-//   return [
-//     {
-//       "value": 0,
-//       "address": address,
-//       "message": messageInTrytes
-//     }
-//   ];
-// }
+  // Define a zero-value transaction object
+  // that sends the message to the address
+  return [
+    {
+      "value": 0,
+      "address": address,
+      "message": messageInTrytes
+    }
+  ];
+}
 
-// function writeToTangle(payload, callBack?: (bundleHash: string, addressHash: string) => void) {
-//     const targetNode = payload.node;
-//     const address = payload.address;
+type payload<data> =  {node: typeof iota; address: string, data: data;}
 
-//     const transfers = preparTransferMessage(address, payload.data);
-//     targetNode.prepareTransfers(seed, transfers)
-//         .then(trytes => {
-//             return targetNode.sendTrytes(trytes, depth, minimumWeightMagnitude);
-//         })
-//         .then(bundle => {
-//             const bundle_hash = bundle[0].hash;// このハッシュ値をデータベースに書き込む
-//             console.log(bundle_hash + " <- transaction hash- " + payload.data.frame_num);
-//             if (callBack) {
-//                 callBack(bundle[0].hash as string, bundle[0].address as string)
-//             }
-//         })
-//         .catch(err => {
-//             console.log(err);
-//         })
-// }
+function writeToTangle<payloadData>(payload: payload<payloadData>, callBack?: (bundleHash: string, addressHash: string) => void) {
+    const targetNode = payload.node;
+    const address = payload.address;
+
+    const transfers = preparTransferMessage(address, payload.data);
+    targetNode.prepareTransfers(seed, transfers)
+        .then(trytes => {
+            return targetNode.sendTrytes(trytes, depth, minimumWeightMagnitude);
+        })
+        .then(bundle => {
+            const bundle_hash = bundle[0].hash;// このハッシュ値をデータベースに書き込む
+            console.log(bundle_hash + " <- transaction hash- ");
+            if (callBack) {
+                callBack(bundle[0].hash as string, bundle[0].address as string)
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        })
+}
+
+// test API
+app.get("/api/test", (req, res, next) => {
+    res.json({"result": "OK"});
+    writeToTangle<{msg: string}>({node: iota, address:address, data: {msg: 'test'}},)
+});
 
 async function getAddress(seed: string, index: number) {
     let newAddress = await iota.getNewAddress(seed, { index: index, security: securityLevel, total: 1 });

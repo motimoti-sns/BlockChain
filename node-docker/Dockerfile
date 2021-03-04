@@ -25,9 +25,6 @@ RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so
 #ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
 
-# setup supervisrod
-COPY supervisord.conf /app/hornet/supervisord.conf
-
 # install hornet
 WORKDIR /app
 RUN git clone https://github.com/gohornet/hornet.git
@@ -36,6 +33,9 @@ COPY config.json /app/hornet/config.json
 ARG HORNETADDRESS
 RUN sed -e "s/HOSTADDRESS/$HORNETADDRESS/" -i /app/hornet/config.json
 COPY snapshot.csv /app/hornet/snapshot.csv
+
+# setup supervisrod
+COPY supervisord.conf /app/hornet/supervisord.conf
 
 EXPOSE 8081 14265 14626 15600 222 4001
 CMD ["/usr/bin/supervisord"]

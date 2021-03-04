@@ -5,7 +5,7 @@ services:
             context: .
             dockerfile: Dockerfile
             args:
-                - HORNETADDRESS=${HORNETADDRESS}
+                - HORNETADDRESS=EPJIAUDZOJGYNHPCEOLMTHEJPVDFGKUAIQO99M9ZGQO9KITPTWCSKCSHAOHZWNZHBXN99VMYT9POAXBYC
         volumes:
             - ../scripts:/app/nodeapp/scripts
         network_mode: host
