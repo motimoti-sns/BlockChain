@@ -27,7 +27,6 @@ RUN echo "export VISIBLE=now" >> /etc/profile
 
 # setup supervisrod
 COPY supervisord.conf /app/hornet/supervisord.conf
-COPY supervisord-init.conf /etc/supervisor/conf.d/supervisord.conf
 
 # install hornet
 WORKDIR /app
@@ -38,5 +37,5 @@ ARG HORNETADDRESS
 RUN sed -e "s/HOSTADDRESS/$HORNETADDRESS/" -i /app/hornet/config.json
 COPY snapshot.csv /app/hornet/snapshot.csv
 
-EXPOSE 8081 14265 14626 15600 222
+EXPOSE 8081 14265 14626 15600 222 4001
 CMD ["/usr/bin/supervisord"]
