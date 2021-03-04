@@ -1,0 +1,11 @@
+version: '3'
+services:
+    node-docker:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            args:
+                - HORNETADDRESS=${HORNETADDRESS}
+        volumes:
+            - ../scripts:/app/nodeapp/scripts
+        network_mode: host

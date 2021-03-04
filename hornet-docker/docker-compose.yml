@@ -1,6 +1,6 @@
 version: '3'
 services:
-    hornet:
+    hornet-docker:
         build:
             context: .
             dockerfile: Dockerfile
