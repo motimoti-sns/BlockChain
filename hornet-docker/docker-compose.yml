@@ -4,4 +4,10 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
+        ports:
+            - "15600:15600"
+            - "14265:14265" 
+            - "14626:14626"
+            - "8081:8081"
+            - "2222:222"
         network_mode: host

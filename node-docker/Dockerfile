@@ -35,7 +35,7 @@ RUN sed -e "s/HOSTADDRESS/$HORNETADDRESS/" -i /app/hornet/config.json
 COPY snapshot.csv /app/hornet/snapshot.csv
 
 # setup supervisrod
-COPY supervisord.conf /app/hornet/supervisord.conf
+COPY supervisord-init.conf /etc/supervisor/conf.d/supervisord.conf
 
 EXPOSE 8081 14265 14626 15600 222 4001
 CMD ["/usr/bin/supervisord"]

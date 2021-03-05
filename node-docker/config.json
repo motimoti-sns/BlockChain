@@ -77,10 +77,7 @@
         "bindAddress": "0.0.0.0:14626",
         "runAsEntryNode": false,
         "entryNodes": [
-          "46CstniGgfWMdAySiWuS7bVfugwuHZCUQKVaC4Y34EYJ@enter.hornet.zone:14626",
-          "EkSLZ4uvSTED1x6KaGzqxoGxjbytt2rPVfbJk1LRLCGL@enter.manapotion.io:18626",
-          "2GHfjJhTqRaKCGBJJvS5RWty61XhjX7FtbVDhg7s8J1x@entrynode.tanglebay.org:14626",
-          "iotaMk9Rg8wWo1DDeG7fwV9iJ41hvkwFX8w6MyTQgDu@enter.thetangle.org:14627"
+          "6noHEbH6f8buENiNZtmzLK4fKJ1xPX43JAgVagiYyftv@HOSTADDRESS:14626"
         ],
         "seed": ""
       }
@@ -90,10 +87,10 @@
       "maxDepth": 5
     },
     "node": {
-      "alias": "Coordinator",
+      "alias": "node",
       "showAliasInGetNodeInfo": false,
       "disablePlugins": [],
-      "enablePlugins": ["Coordinator"]
+      "enablePlugins": []
     },
     "logger": {
       "level": "info",
