@@ -10,7 +10,6 @@ services:
             - "14626:14626"
             - "8081:8081"
             - "2222:222"
-        network_mode: host
     node-docker1:
         build:
             args:

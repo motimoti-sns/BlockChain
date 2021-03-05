@@ -1,127 +1,124 @@
 {
   "useProfile": "auto",
-    "httpAPI": {
+  "httpAPI": {
       "basicAuth": {
-        "enabled": false,
-        "username": "",
-        "passwordHash": "",
-        "passwordSalt": ""
+          "enabled": false,
+          "username": "",
+          "passwordHash": "",
+          "passwordSalt": ""
       },
       "excludeHealthCheckFromAuth": false,
       "permitRemoteAccess": [
-        "getNodeInfo",
-        "getBalances",
-        "checkConsistency",
-        "getTipInfo",
-        "getTransactionsToApprove",
-        "getInclusionStates",
-        "getNodeAPIConfiguration",
-        "wereAddressesSpentFrom",
-        "broadcastTransactions",
-        "findTransactions",
-        "storeTransactions",
-        "getTrytes",
-        "attachToTangle"
-      ],
-      "permittedRoutes": [
-        "healthz"
+          "getNodeInfo",
+          "getBalances",
+          "checkConsistency",
+          "getTransactionsToApprove",
+          "getInclusionStates",
+          "getNodeAPIConfiguration",
+          "wereAddressesSpentFrom",
+          "broadcastTransactions",
+          "findTransactions",
+          "storeTransactions",
+          "getTrytes",
+          "attachToTangle"
       ],
       "whitelistedAddresses": [],
       "bindAddress": "0.0.0.0:14265",
       "limits": {
-        "bodyLengthBytes": 1000000,
-        "findTransactions": 1000,
-        "getTrytes": 1000,
-        "requestsList": 1000
+          "bodyLengthBytes": 1000000,
+          "findTransactions": 1000,
+          "getTrytes": 1000,
+          "requestsList": 1000
       }
-    },
-    "dashboard": {
-      "bindAddress": "localhost:8081",
+  },
+  "dashboard": {
+      "bindAddress": "0.0.0.0:8081",
       "theme": "default",
       "dev": false,
       "basicAuth": {
-        "enabled": false,
-        "username": "",
-        "passwordHash": "",
-        "passwordSalt": ""
+          "enabled": false,
+          "username": "",
+          "passwordHash": "",
+          "passwordSalt": ""
       }
-    },
-    "snapshots": {
+  },
+  "db": {
+      "path": "mainnetdb"
+  },
+  "snapshots": {
       "loadType": "global",
       "global": {
           "path": "snapshot.csv",
           "spentAddressesPaths": [],
           "index": 0
       }
-    },
-    "coordinator":{
-      "address": "EPJIAUDZOJGYNHPCEOLMTHEJPVDFGKUAIQO99M9ZGQO9KITPTWCSKCSHAOHZWNZHBXN99VMYT9POAXBYC",
-      "merkleTreeDepth":18,
-      "mwm":5,
-      "securityLevel": 2,
-      "stateFilePath":"coordinator.state",
-      "merkleTreeFilePath":"coordinator.tree",
-      "intervalSeconds":60,
-      "checkpointTransactions":5
-    },
-    "spentAddresses": {
+  },
+  "spentAddresses": {
       "enabled": true
-    },
-    "network": {
+  },
+  "coordinator": {
+      "address": "EPJIAUDZOJGYNHPCEOLMTHEJPVDFGKUAIQO99M9ZGQO9KITPTWCSKCSHAOHZWNZHBXN99VMYT9POAXBYC",
+      "securityLevel": 2,
+      "merkleTreeDepth":  18,
+      "mwm": 5,
+      "stateFilePath": "coordinator.state",
+      "merkleTreeFilePath": "coordinator.tree",
+      "intervalSeconds": 60,
+      "checkpointTransactions": 5
+  },
+  "network": {
       "preferIPv6": false,
       "gossip": {
-        "bindAddress": "0.0.0.0:15600",
-        "reconnectAttemptIntervalSeconds": 60
+          "bindAddress": "0.0.0.0:15600",
+          "reconnectAttemptIntervalSeconds": 60
       },
       "autopeering": {
-        "bindAddress": "0.0.0.0:14626",
-        "runAsEntryNode": false,
-        "entryNodes": [
-          "46CstniGgfWMdAySiWuS7bVfugwuHZCUQKVaC4Y34EYJ@enter.hornet.zone:14626",
-          "EkSLZ4uvSTED1x6KaGzqxoGxjbytt2rPVfbJk1LRLCGL@enter.manapotion.io:18626",
-          "2GHfjJhTqRaKCGBJJvS5RWty61XhjX7FtbVDhg7s8J1x@entrynode.tanglebay.org:14626",
-          "iotaMk9Rg8wWo1DDeG7fwV9iJ41hvkwFX8w6MyTQgDu@enter.thetangle.org:14627"
-        ],
-        "seed": ""
+          "bindAddress": "0.0.0.0:14626",
+          "runAsEntryNode": false,
+          "entryNodes": [
+              "46CstniGgfWMdAySiWuS7bVfugwuHZCUQKVaC4Y34EYJ@enter.hornet.zone:14626",
+              "EkSLZ4uvSTED1x6KaGzqxoGxjbytt2rPVfbJk1LRLCGL@enter.manapotion.io:18626",
+              "2GHfjJhTqRaKCGBJJvS5RWty61XhjX7FtbVDhg7s8J1x@entrynode.tanglebay.org:14626",
+              "iotaMk9Rg8wWo1DDeG7fwV9iJ41hvkwFX8w6MyTQgDu@enter.thetangle.org:14627"
+          ],
+          "seed": ""
       }
-    },
-    "tipsel": {
+  },
+  "tipsel": {
       "belowMaxDepthTransactionLimit": 20000,
       "maxDepth": 5
-    },
-    "node": {
+  },
+  "node": {
       "alias": "Coordinator",
       "showAliasInGetNodeInfo": false,
       "disablePlugins": [],
-      "enablePlugins": ["Coordinator"]
-    },
-    "logger": {
+      "enablePlugins": [
+          "Coordinator"
+      ]
+  },
+  "logger": {
       "level": "info",
       "disableCaller": true,
       "encoding": "console",
       "outputPaths": [
-        "stdout"
+          "stdout"
       ]
-    },
-    "warpsync": {
+  },
+  "warpsync": {
       "advancementRange": 200
-    },
-    "mqtt": {
-        "config": "mqtt_config.json"
-    },
-    "spammer": {
+  },
+  "spammer": {
       "address": "HORNET99INTEGRATED99SPAMMER999999999999999999999999999999999999999999999999999999",
+      "depth": 1,
       "message": "Spamming with HORNET tipselect",
       "tag": "HORNET99INTEGRATED99SPAMMER",
-      "tagSemiLazy": "",
       "cpuMaxUsage": 0.8,
       "tpsRateLimit": 0.0,
       "bundleSize": 1,
       "valueSpam": false,
-      "workers": 0,
-      "autostart": false
-    },
-    "graph": {
+      "workers": 0
+  },
+  "graph": {
       "webRootPath": "IOTAtangle/webroot",
       "domain": "",
       "webSocket": {
@@ -131,28 +128,31 @@
       "networkName": "meets HORNET",
       "explorerTxLink": "http://localhost:8081/explorer/tx/",
       "explorerBundleLink": "http://localhost:8081/explorer/bundle/"
-    },
-    "monitor": {
-        "tangleMonitorPath": "tanglemonitor/frontend",
-        "domain": "",
-        "initialTransactions": 15000,
-        "remoteApiPort": 4433,
-        "webBindAddress": "localhost:4434",
-        "apiBindAddress": "localhost:4433",
-        "webSocket": {
-            "uri": ""
-        }
-    },
-    "zmq": {
+  },
+  "monitor": {
+      "tangleMonitorPath": "tanglemonitor/frontend",
+      "domain": "",
+      "initialTransactions": 15000,
+      "remoteApiPort": 4433,
+      "webBindAddress": "localhost:4434",
+      "apiBindAddress": "localhost:4433",
+      "webSocket": {
+          "uri": ""
+      }
+  },
+  "mqtt": {
+      "config": "mqtt_config.json"
+  },
+  "zmq": {
       "bindAddress": "localhost:5556"
-    },
-    "profiling": {
+  },
+  "profiling": {
       "bindAddress": "localhost:6060"
-    },
-    "prometheus": {
+  },
+  "prometheus": {
       "bindAddress": "localhost:9311",
       "goMetrics": false,
       "processMetrics": false,
       "promhttpMetrics": false
-    }
   }
+}
