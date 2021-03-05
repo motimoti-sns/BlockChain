@@ -1,4 +1,3 @@
-import {} from '../scripts/types'
 // EXPRESS関連
 import express from 'express';
 import bodyParser from 'body-parser';
