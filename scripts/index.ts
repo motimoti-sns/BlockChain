@@ -119,6 +119,12 @@ app.post("/api/post", [
   }
 })
 
+app.get("/api/transaction/:hash", (req, res) => {
+  iota.getTransactionObjects([req.params.hash])
+          .then(transaction => res.json(JSON.parse(extractJson(transaction) as string)))
+          .catch(err => res.status(422).json({"err": err}));
+});
+
 async function getAddress(seed: string, index: number) {
     let newAddress = await iota.getNewAddress(seed, { index: index, security: securityLevel, total: 1 });
     return newAddress[0];
