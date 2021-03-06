@@ -116,6 +116,7 @@ app.post("/api/post", [
       hash: string,
       index: number
     }>({node: iota, address:address, data: data})
+    res.json({"msg": "success"});
   }
 })
 
