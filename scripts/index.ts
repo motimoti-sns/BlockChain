@@ -12,11 +12,16 @@ import {extractJson} from '@iota/extract-json';
 import * as Converter from '@iota/converter';
 import * as crypto from 'crypto';
 
-
+import * as dotenv from 'dotenv';
+dotenv.config()
 import secureRandom from 'secure-random';
 import {ec} from 'elliptic';
+import axios from 'axios';
+import {TextHashData} from './types'
 // eslint-disable-next-line new-cap
 const ecdsa = new ec('secp256k1');
+
+const apiServerUrl = process.env.API_SERVER_URL
 
 const iota = composeAPI({provider: 'http://localhost:14265',});
 
@@ -30,7 +35,7 @@ var address;
 getAddress(seed, 1).then(function(ret_address){
   address = ret_address;
 });
-const keypair = createKeyPair();
+
 
 /* 2. listen()メソッドを実行して4001番ポートで待ち受け。*/
 const serverPortNumber = 4001
@@ -97,25 +102,28 @@ app.post("/api/post", [
   check("previous_hash").isString(),
   check("hash").isString(),
   check("index").isInt(),
+  check("text_id").isInt(),
 ], (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
   }
   if (req.body) {
-    const data = {
+    const data: TextHashData = {
       user_id: req.body.user_id as number,
       previous_hash: req.body.previous_hash as string,
       hash: req.body.hash as string,
       index: req.body.index as number
     }
     console.log(data)
-    writeToTangle<{
-      user_id: number,
-      previous_hash: string,
-      hash: string,
-      index: number
-    }>({node: iota, address:address, data: data})
+    writeToTangle<TextHashData>(
+      {node: iota, address:address, data: data},
+      (bundleHash) => axios.post(`${apiServerUrl}/api/relation/texthash`, {
+        text_id: req.body.text_id as number,
+        index: req.body.index as number,
+        transaction_hash: bundleHash,
+      })
+    );
     res.json({"msg": "success"});
   }
 })
@@ -129,42 +137,4 @@ app.get("/api/transaction/:hash", (req, res) => {
 async function getAddress(seed: string, index: number) {
     let newAddress = await iota.getNewAddress(seed, { index: index, security: securityLevel, total: 1 });
     return newAddress[0];
-}
-
-function createKeyPair() {
-  const max = Buffer.from(
-      "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364140",
-      "hex"
-  );
-  let isInvalid = true;
-  let privateKey;
-
-  while (isInvalid) {
-      let privateKeySeed = secureRandom.randomBuffer(32);
-      if (Buffer.compare(max, privateKeySeed) === 1) {
-          isInvalid = false;
-      }
-      privateKey = privateKeySeed.toString("hex");
-  }
-
-  const keys = ecdsa.keyFromPrivate(privateKey);
-  const publicKey = keys.getPublic("hex");
-
-  return ({"privateKey":privateKey, "publicKey":publicKey});
-}
-
-function createSignature(message, privateKey) {
-  const privateKeyPair = ecdsa.keyFromPrivate(privateKey);
-  const signature = ecdsa.sign(message, privateKeyPair).toDER('hex'); //ハッシュされたメッセージに対して秘密鍵で電子署名する。
-  return signature;
-}
-
-function verifySignature(message, publicKey, signature) {
-  const publicKeyPair = ecdsa.keyFromPublic(publicKey, 'hex'); // 公開鍵で電子署名の真正を確認。
-  const isVerified = publicKeyPair.verify(message, signature);
-  return isVerified;
-}
-
-function stackHash(previous_hash, current_hash) {
-  return crypto.createHash('sha256').update(previous_hash + current_hash).digest('hex');
 }
