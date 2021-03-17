@@ -81,7 +81,6 @@ function writeToTangle<payloadData>(payload: payload<payloadData>, callBack?: (b
       })
       .then(bundle => {
           const bundle_hash = bundle[0].hash;// このハッシュ値をデータベースに書き込む
-          console.log(bundle_hash + " <- transaction hash- ");
           if (callBack) {
               callBack(bundle[0].hash as string, bundle[0].address as string)
           }
@@ -124,6 +123,41 @@ app.post("/api/post", [
         transaction_hash: bundleHash,
       })
     );
+    res.json({"msg": "success"});
+  }
+})
+
+type LogData = {
+  user_id: number;
+  operation: string;
+  timestamp: string;
+}
+
+app.post("/api/log", [
+  check("user_id").isInt(),
+  check("operation").isString(),
+  check("timestamp").isString(),
+], (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+  if (req.body) {
+    const data: LogData = {
+      user_id: req.body.user_id as number,
+      operation: req.body.operation as string,
+      timestamp: req.body.timestamp as string,
+    }
+    console.log(data)
+    writeToTangle<LogData>(
+      {node: iota, address:address, data: data}, 
+      (bundleHash) => axios.post(`${apiServerUrl}/api/relation/log`, {
+        user_id: data.user_id,
+        operation: data.operation,
+        transaction_hash: bundleHash,
+        timestamp: data.timestamp
+      })
+    )
     res.json({"msg": "success"});
   }
 })
